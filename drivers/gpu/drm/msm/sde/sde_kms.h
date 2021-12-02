@@ -48,7 +48,7 @@
  */
 #define SDE_DEBUG(fmt, ...)                                                \
 	do {                                                               \
-		no_printk(fmt, ##__VA_ARGS__);
+		no_printk(fmt, ##__VA_ARGS__);				   \
 	} while (0)
 
 /**
@@ -57,7 +57,7 @@
  */
 #define SDE_DEBUG_DRIVER(fmt, ...)                                         \
 	do {                                                               \
-		no_printk(fmt, ##__VA_ARGS__);
+		no_printk(fmt, ##__VA_ARGS__);				   \
 	} while (0)
 
 #define SDE_ERROR(fmt, ...) pr_err("[sde error]" fmt, ##__VA_ARGS__)
