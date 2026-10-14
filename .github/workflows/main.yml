@@ -1,0 +1,29 @@
+name: Build OnePlus 6T kernel (nethunter)
+
+on:
+  workflowzipch:
+
+jobs:
+  build:
+    name: Build nethunter kernel
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Build kernel + AnyKernel3 zip
+        uses: dabao1955/kernel_build_action@main
+        with:
+          kernel-url: https://github.com/jandola428-tech/OnePlus6
+          kernel-branch: nethunter-11.0
+          config: nethunter_defconfig
+          arch: arm64
+          aosp-clang: true
+          aosp-clang-version: r383902
+          aosp-gcc: true
+          android-version: 11
+          anykernel3: true
+
+      - name: Upload AnyKernel3 zip
+        uses: actions/upload-artifact@v4
+        with:
+          name: nethunter-kernel-zip
+          path: AnyKernel3/*.zip
