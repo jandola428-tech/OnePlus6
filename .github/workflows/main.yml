@@ -1,0 +1,47 @@
+name: Build OnePlus 6T kernel (nethunter)
+
+on:
+  workflow_dispatch:
+
+jobs:
+  build:
+    name: Build nethunter kernel
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Build kernel
+        uses: dabao1955/kernel_build_action@main
+        with:
+          kernel-url: https://github.com/jandola428-tech/OnePlus6
+          kernel-branch: nethunter-11.0
+          config: nethunter_defconfig
+          arch: arm64
+          aosp-clang: true
+          aosp-clang-version: r383902
+          aosp-gcc: true
+          android-version: 11
+
+      - name: Package kernel as AnyKernel3 flashable zip
+        shell: bash
+        run: |
+          set -euo pipefail
+
+          KERNEL_IMG="$(find . -type f -name 'Image.gz-dtb' | head -n 1)"
+
+          if [ -z "${KERNEL_IMG}" ] || [ ! -f "${KERNEL_IMG}" ]; then
+            echo "Image.gz-dtb was not found. Build may have failed." >&2
+            exit 1
+          fi
+
+          git clone --depth 1 -b master https://github.com/osm0sis/AnyKernel3 AnyKernel3
+          cp "${KERNEL_IMG}" AnyKernel3/Image.gz-dtb
+
+          cd AnyKernel3
+          zip -r9 ../nethunter-kernel.zip . -x ".git/*" -x "*.git*"
+          cd ..
+
+      - name: Upload AnyKernel3 zip
+        uses: actions/upload-artifact@v4
+        with:
+          name: nethunter-kernel-zip
+          path: nethunter-kernel.zip
