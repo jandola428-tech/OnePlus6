@@ -12,7 +12,7 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
         with:
-          ref: nethunter
+          ref: nethunter-11.0
           fetch-depth: 0
 
       - name: Build kernel
